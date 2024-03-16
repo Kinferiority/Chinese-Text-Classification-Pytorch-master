@@ -50,9 +50,10 @@ class Model(torch.nn.Module):
         return out
 
 
-model = Model()
+
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model = Model()
 
 # 加载预训练模型
 pretrained = BertModel.from_pretrained('bert-base-chinese')
@@ -88,14 +89,14 @@ def collate_fn(data):
 train_path = "./THUCNews/data/train.txt"
 train_data = myDataset(train_path)
 loader = torch.utils.data.DataLoader(dataset=train_data,
-                                     batch_size=1000,
+                                     batch_size=512,
                                      collate_fn=collate_fn,
                                      shuffle=True,
                                      drop_last=True)
 from transformers import AdamW
 
 #训练
-optimizer = AdamW(model.parameters(), lr=5e-4)
+optimizer = AdamW(model.parameters(), lr=1e-3)
 criterion = torch.nn.CrossEntropyLoss()
 
 model.train()
@@ -126,7 +127,7 @@ def test():
     total = 0
 
     loader_test = torch.utils.data.DataLoader(dataset=val_dataset,
-                                              batch_size=1000,
+                                              batch_size=200,
                                               collate_fn=collate_fn,
                                               shuffle=False,
                                               drop_last=True)
